@@ -74,19 +74,21 @@ void Line::drawLinePro(CV_IN_OUT Mat& img, Scalar lineColor /*= Scalar(255, 255,
 	int dh = abs(endP.getH() - startP.getH());
 	int dw = abs(endP.getW() - startP.getW());
 	int eee = 0;
+	int stepH = startP.getH() < endP.getH() ? 1 : -1;
+	int stepW = startP.getH() < endP.getH() ? 1 : -1;
+
 	
 	myPoint pointPath(startP.getW(), startP.getH());
 
 	if (dw >= dh)
 	{
 		int draw_h = startP.getH();
-		int step = startP.getH() < endP.getH() ? 1 : -1;
-		for (int w = startP.getW(); w <= endP.getW(); w++)
+		for (int w = startP.getW(); w != endP.getW(); w+=stepW)
 		{
 			eee += dh;
 			if (2 * eee >= dw)
 			{
-				draw_h += step;
+				draw_h += stepH;
 				pointPath.setWH(w, draw_h);//h+1
 				eee = eee - dw;
 			}
@@ -101,15 +103,15 @@ void Line::drawLinePro(CV_IN_OUT Mat& img, Scalar lineColor /*= Scalar(255, 255,
 	else
 	{
 		int draw_w = startP.getW();
-		/*int start = min(startP.getH(), endP.getH());
-		int end = max(startP.getH(), endP.getH());*/
-		int step = startP.getH() < endP.getH() ? 1 : -1;
-		for (int h = startP.getH(); h != endP.getH(); h += step)
+
+
+		for (int h = startP.getH(); h != endP.getH(); h += stepH)
 		{
 			eee += dw;
 			if (2 * eee >= dh)
 			{
-				pointPath.setWH(draw_w++, h);//w+1
+				draw_w += stepW;
+				pointPath.setWH(draw_w, h);
 				eee = eee - dh;
 
 			}
